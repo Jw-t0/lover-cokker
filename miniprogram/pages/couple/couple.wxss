@@ -1,0 +1,112 @@
+.relationship {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 38rpx 28rpx;
+  gap: 18rpx;
+}
+
+.person {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.avatar {
+  width: 132rpx;
+  height: 132rpx;
+  margin: 0 auto 18rpx;
+  border-radius: 50%;
+  border: 8rpx solid #f5c3d0;
+  background: #ffe3ea;
+  color: #c94c6c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.partner-avatar {
+  border-color: #ffe4a8;
+  background: #fff7df;
+  color: #a87110;
+}
+
+.empty-avatar {
+  border-color: #eadfd9;
+  background: #fffaf6;
+  color: #b8aaa2;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+}
+
+.person-name {
+  font-size: 30rpx;
+  line-height: 1.2;
+  font-weight: 900;
+  color: #4d373e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.person-role {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #9a918b;
+}
+
+.heart-line {
+  flex: 0 0 80rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 50%;
+  text-align: center;
+  background: #4d373e;
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: 900;
+}
+
+.status-card {
+  margin-top: 30rpx;
+  padding: 34rpx;
+  border-radius: 30rpx;
+  background: #4d373e;
+  color: #ffffff;
+  box-shadow: 0 16rpx 34rpx rgba(43, 41, 40, 0.12);
+}
+
+.status-title {
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.status-desc {
+  margin-top: 14rpx;
+  color: #d8cac7;
+  font-size: 27rpx;
+  line-height: 1.55;
+}
+
+.invite-button {
+  margin-top: 30rpx;
+}
+
+.relationship-actions {
+  display: flex;
+  gap: 18rpx;
+}
+
+.relationship-actions .invite-button {
+  flex: 1;
+}
+
+.pending-status-card {
+  background: #6a4d55;
+}

@@ -1,0 +1,46 @@
+<view class="page">
+  <view class="page-title">我的订单</view>
+  <view class="page-subtitle">这里可以看到厨师的制作进度</view>
+  <button class="history-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="goHistory">查看历史订单</button>
+
+  <view wx:if="{{loading}}" class="notice card">正在查看这顿饭的进度</view>
+  <view wx:elif="{{error}}" class="notice card">
+    <view class="notice-title">订单暂时打不开</view>
+    <view class="notice-desc">{{error}}</view>
+    <button class="order-action-button soft-button" bindtap="retry">重新加载</button>
+  </view>
+  <block wx:else>
+    <order-card wx:if="{{order}}" order="{{order}}" />
+    <view wx:if="{{recentCancelled}}" class="notice cancelled-notice card">
+      <view class="notice-title">上一单已取消</view>
+      <view class="notice-desc">{{recentCancelled.cancelReason || '这顿饭没有继续制作，可以重新选菜。'}}</view>
+      <button class="order-action-button soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="goOrder">重新点菜</button>
+    </view>
+    <empty-state wx:if="{{!order && !recentCancelled}}" title="暂无订单" desc="去点一道想吃的菜吧" />
+  </block>
+
+  <view wx:if="{{order && order.status === 'pending'}}" class="action-block">
+    <button class="order-action-button primary-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="goOrder">继续加菜</button>
+    <button class="order-action-button danger-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="cancelCurrentOrder">取消订单</button>
+    <view class="notice card">
+      <view class="notice-title">等待厨师接单中</view>
+      <text class="notice-desc">厨师看到订单后，就会开始处理啦</text>
+    </view>
+  </view>
+
+  <view wx:if="{{order && order.status === 'accepted'}}" class="notice card">
+    <view class="notice-title">厨师正在制作啦</view>
+    <text class="notice-desc">稍等一下，这顿饭已经在路上了</text>
+    <button class="order-action-button primary-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="goOrder">继续加菜</button>
+  </view>
+
+  <view wx:if="{{order && order.status === 'completed'}}" class="review card">
+    <view class="section-title">给厨师打个分吧</view>
+    <rating-stars value="{{rating}}" bind:change="onRatingChange" />
+    <textarea class="textarea" value="{{reviewContent}}" bindinput="onReviewInput" maxlength="100" placeholder="写点这顿饭让你开心的地方"></textarea>
+    <button class="review-button primary-button" hover-class="tap-feedback" hover-stay-time="120" disabled="{{reviewSubmitting}}" bindtap="submitReview">{{reviewSubmitting ? '提交中' : '提交评价'}}</button>
+  </view>
+
+  <button wx:if="{{!order}}" class="primary-button go-order" hover-class="tap-feedback" hover-stay-time="120" bindtap="goOrder">去点菜</button>
+  <role-tab-bar current="/pages/my-order/my-order" />
+</view>

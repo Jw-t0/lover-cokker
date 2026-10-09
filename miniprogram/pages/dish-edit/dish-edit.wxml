@@ -1,0 +1,74 @@
+<view class="page">
+  <view class="page-title">{{id ? '编辑菜品' : '添加新菜品'}}</view>
+  <view class="page-subtitle">维护你们小饭桌里的专属菜单</view>
+
+  <view class="form card">
+    <view class="image-picker" hover-class="tap-feedback" hover-stay-time="120" bindtap="chooseImage">
+      <image wx:if="{{form.imageUrl}}" class="dish-image" src="{{form.imageUrl}}" mode="aspectFill"></image>
+      <text wx:else>{{form.emoji}}</text>
+    </view>
+    <view class="image-tip">点击更换菜品图</view>
+    <view class="image-actions">
+      <view class="icon-picker-trigger" hover-class="tap-feedback" hover-stay-time="120" bindtap="openIconPicker">选择菜品图标</view>
+      <view class="image-action-divider">或</view>
+      <view class="image-action-note">点击上方上传实拍图</view>
+    </view>
+
+    <view class="label">菜名</view>
+    <input class="input" data-field="name" value="{{form.name}}" bindinput="input" maxlength="12" placeholder="例如：可乐鸡翅" />
+
+    <view class="label">分类</view>
+    <picker mode="selector" range="{{categories}}" range-key="name" value="{{categoryIndex}}" bindchange="chooseCategory">
+      <view class="picker">{{categories[categoryIndex].name || '请选择分类'}}</view>
+    </picker>
+
+    <view class="label">描述</view>
+    <input class="input" data-field="description" value="{{form.description}}" bindinput="input" maxlength="30" placeholder="例如：甜咸口，适合下饭" />
+
+    <view class="label">配料</view>
+    <input class="input" data-field="ingredients" value="{{form.ingredients}}" bindinput="input" maxlength="80" placeholder="例如：鸡翅、可乐、姜片" />
+
+    <view class="label">菜品做法</view>
+    <textarea class="textarea method-textarea" data-field="method" value="{{form.method}}" bindinput="input" maxlength="300" placeholder="例如：先煎香，再小火慢炖收汁"></textarea>
+
+    <view class="label">可选口味</view>
+    <input class="input" data-field="tasteOptionsText" value="{{form.tasteOptionsText}}" bindinput="input" maxlength="80" placeholder="例如：少辣, 多葱, 不蒜" />
+    <view class="muted helper">用逗号或空格分隔，客人点菜时可以复选</view>
+
+    <view class="label">价格</view>
+    <input class="input" type="digit" data-field="price" value="{{form.price}}" bindinput="input" placeholder="例如：28" />
+
+    <view class="between status-row">
+      <view>
+        <view class="label no-margin">是否上架</view>
+        <view class="muted">上架后客人可以点这道菜</view>
+      </view>
+      <switch checked="{{form.status === 'online'}}" color="#F85D8D" bindchange="switchStatus" />
+    </view>
+  </view>
+
+  <button class="primary-button save" hover-class="tap-feedback" hover-stay-time="120" disabled="{{saving}}" bindtap="save">{{saving ? '保存中' : '保存菜品'}}</button>
+
+  <view wx:if="{{iconPickerVisible}}" class="icon-picker-layer">
+    <view class="icon-picker-mask" bindtap="closeIconPicker"></view>
+    <view class="icon-picker-sheet" catchtap="stopIconPickerTap">
+      <view class="icon-picker-header">
+        <view>
+          <view class="icon-picker-title">选一个菜品图标</view>
+          <view class="icon-picker-subtitle">没有合适的，也可以继续上传实拍图</view>
+        </view>
+        <view class="icon-picker-close" aria-label="关闭" bindtap="closeIconPicker">×</view>
+      </view>
+      <scroll-view class="icon-picker-scroll" scroll-y="true">
+        <view wx:for="{{iconGroups}}" wx:for-item="group" wx:key="name" class="icon-group">
+          <view class="icon-group-name">{{group.name}}</view>
+          <view class="icon-grid">
+            <view wx:for="{{group.items}}" wx:for-item="icon" wx:key="*this" class="icon-option {{form.emoji === icon ? 'selected' : ''}}" data-emoji="{{icon}}" hover-class="tap-feedback" hover-stay-time="120" bindtap="chooseEmoji">
+              <text class="icon-option-emoji">{{icon}}</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

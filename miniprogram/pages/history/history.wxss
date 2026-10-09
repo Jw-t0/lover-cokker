@@ -1,0 +1,9 @@
+.history-card {
+  margin-bottom: 32rpx;
+  animation: list-item-enter 280ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.history-loading,
+.history-error { margin-top: 28rpx; padding: 36rpx; text-align: center; }
+
+.history-more { margin: 8rpx 0 30rpx; }

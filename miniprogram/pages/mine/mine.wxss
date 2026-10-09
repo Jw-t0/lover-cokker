@@ -1,0 +1,137 @@
+.profile {
+  display: flex;
+  align-items: center;
+  padding: 38rpx;
+  margin-top: 26rpx;
+  border-radius: 24rpx;
+  animation: list-item-enter 280ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.mine-loading,
+.mine-error { margin-top: 28rpx; padding: 40rpx; text-align: center; }
+
+.avatar {
+  width: 148rpx;
+  height: 148rpx;
+  border-radius: 50%;
+  border: 8rpx solid #f5c3d0;
+  background: #ffe3ea;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c94c6c;
+  font-size: 48rpx;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+}
+
+.profile-main {
+  flex: 1;
+  margin-left: 30rpx;
+  min-width: 0;
+}
+
+.name {
+  font-size: 42rpx;
+  font-weight: 900;
+  display: inline-block;
+  margin-right: 16rpx;
+}
+
+.uid,
+.hint {
+  margin-top: 14rpx;
+  color: #8b7078;
+  font-size: 26rpx;
+}
+
+.arrow {
+  font-size: 54rpx;
+  color: #c4b5a2;
+}
+
+.couple-card {
+  margin: 34rpx 0;
+  padding: 34rpx;
+  border-radius: 24rpx;
+  background: #4d373e;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  box-shadow: 0 16rpx 34rpx rgba(43, 41, 40, 0.12);
+  animation: list-item-enter 280ms cubic-bezier(.22, 1, .36, 1) 60ms both;
+}
+
+.heart-icon {
+  width: 84rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+  text-align: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  font-size: 42rpx;
+}
+
+.couple-title {
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.couple-desc {
+  margin-top: 8rpx;
+  color: #c7baaa;
+  font-size: 26rpx;
+}
+
+.couple-button {
+  margin-left: auto;
+  width: 154rpx;
+  height: 74rpx;
+  line-height: 74rpx;
+  border-radius: 999rpx;
+  background: #ffe29f;
+  color: #4d373e;
+  border: 0;
+  font-size: 26rpx;
+  font-weight: 900;
+  padding: 0;
+}
+
+.feature {
+  padding: 40rpx;
+  border-radius: 24rpx;
+  animation: list-item-enter 280ms cubic-bezier(.22, 1, .36, 1) 120ms both;
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: 900;
+  margin-bottom: 32rpx;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 42rpx;
+}
+
+.grid-item {
+  text-align: center;
+  color: #8b7078;
+}
+
+.grid-icon {
+  width: 92rpx;
+  height: 92rpx;
+  line-height: 92rpx;
+  border-radius: 20rpx;
+  background: #ffe3ea;
+  margin: 0 auto 14rpx;
+  color: #c94c6c;
+  font-size: 38rpx;
+}

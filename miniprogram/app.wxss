@@ -1,0 +1,217 @@
+page {
+  min-height: 100vh;
+  background: #fff2f5;
+  color: #4d373e;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+}
+
+button::after {
+  border: 0;
+}
+
+@keyframes page-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlay-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes panel-slide-up {
+  from { opacity: .98; transform: translateY(48%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes list-item-enter {
+  from { opacity: 0; transform: translateY(14rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cart-count-bump {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.page {
+  min-height: 100vh;
+  padding: 44rpx 32rpx 156rpx;
+  box-sizing: border-box;
+  background:
+    radial-gradient(#f5b8c6 1rpx, transparent 1rpx) 0 0 / 30rpx 30rpx,
+    #fff2f5;
+  animation: page-enter 240ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.primary-button,
+.dark-button,
+.soft-button,
+.danger-button,
+.disabled-button,
+.tap-feedback,
+.role-tab-item,
+.category,
+.taste-option,
+.stepper-button,
+.add-button,
+.manage-button,
+.tab-button,
+.subscribe-button,
+.bar-button,
+.footer-button {
+  transition: transform 200ms cubic-bezier(.16, 1, .3, 1), box-shadow 200ms cubic-bezier(.16, 1, .3, 1), background-color 180ms ease, color 180ms ease, opacity 160ms ease;
+}
+
+.tap-feedback-pressed {
+  transform: translateY(1rpx) scale(.985);
+  opacity: .98;
+  box-shadow: 0 6rpx 14rpx rgba(132, 68, 88, 0.10);
+}
+
+.tap-feedback {
+  transform: translateY(1rpx) scale(.985);
+  opacity: .98;
+  box-shadow: 0 6rpx 14rpx rgba(132, 68, 88, 0.10);
+}
+
+.cart-count-bump {
+  animation: cart-count-bump 260ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page, .primary-button, .dark-button, .soft-button, .danger-button,
+  .disabled-button, .tap-feedback, .tap-feedback-pressed, .role-tab-item,
+  .category, .taste-option, .stepper-button, .add-button, .manage-button,
+  .tab-button, .subscribe-button, .bar-button, .footer-button {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.page-title {
+  font-size: 50rpx;
+  font-weight: 900;
+  line-height: 1.12;
+  color: #4d373e;
+  margin: 24rpx 0 18rpx;
+}
+
+.page-subtitle {
+  font-size: 29rpx;
+  color: #8b7078;
+  line-height: 1.45;
+  margin-bottom: 40rpx;
+}
+
+.card {
+  background: #ffffff;
+  border: 2rpx solid #f1dce1;
+  border-radius: 24rpx;
+  box-shadow: 0 18rpx 44rpx rgba(132, 68, 88, 0.09);
+  box-sizing: border-box;
+}
+
+.primary-button,
+.dark-button,
+.soft-button,
+.danger-button,
+.disabled-button {
+  height: 100rpx;
+  border-radius: 999rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 31rpx;
+  font-weight: 900;
+  border: 0;
+  box-sizing: border-box;
+}
+
+.primary-button {
+  background: #ff7297;
+  color: #ffffff;
+  box-shadow: 0 12rpx 0 #df4e72;
+}
+
+.dark-button {
+  background: #4d373e;
+  color: #ffffff;
+}
+
+.soft-button {
+  background: #ffe29f;
+  color: #6b4f2d;
+}
+
+.danger-button {
+  background: #fff5f6;
+  color: #cb4b68;
+  border: 2rpx solid #f3c8d2;
+}
+
+.disabled-button {
+  background: #f1e9eb;
+  color: #a58f96;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40rpx;
+  padding: 0 20rpx;
+  border-radius: 999rpx;
+  background: #ffe3ea;
+  color: #c94c6c;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: #ffffff;
+  border: 2rpx solid #f1dce1;
+  border-radius: 22rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  color: #4d373e;
+}
+
+.input {
+  height: 88rpx;
+  padding: 0 28rpx;
+}
+
+.textarea {
+  min-height: 150rpx;
+  padding: 24rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.muted {
+  color: #8b7078;
+}
+
+.price {
+  color: #e85376;
+  font-weight: 900;
+}

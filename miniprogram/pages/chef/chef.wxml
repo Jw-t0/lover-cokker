@@ -1,0 +1,42 @@
+<view class="page chef-page">
+  <view class="page-title">晚上好，主厨</view>
+  <view class="page-subtitle">看看今晚有什么想吃的吧。</view>
+
+  <view class="tabs">
+    <view class="tab-button tab-dark" hover-class="tap-feedback" hover-stay-time="120" bindtap="goMenu">菜单管理</view>
+    <view class="tab-button tab-soft" hover-class="tap-feedback" hover-stay-time="120" bindtap="goRecipes">菜品大全</view>
+    <view class="tab-button tab-soft" hover-class="tap-feedback" hover-stay-time="120" bindtap="toggleStats">店铺数据</view>
+    <view class="tab-button tab-warm" hover-class="tap-feedback" hover-stay-time="120" bindtap="goHistory">历史订单</view>
+  </view>
+  <button class="subscribe-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="requestOrderSubscribe">开启点菜提醒</button>
+
+  <view wx:if="{{loading}}" class="notice card">正在查看厨房里的订单</view>
+  <view wx:elif="{{error}}" class="notice card">
+    <view class="notice-title">工作台暂时打不开</view>
+    <view class="notice-desc">{{error}}</view>
+    <button class="action-button soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="retry">重新加载</button>
+  </view>
+  <block wx:else>
+    <order-card wx:if="{{order}}" order="{{order}}" title="点了这些菜" />
+    <empty-state wx:else title="暂无订单" desc="等客人点菜后，这里就会出现订单" />
+
+    <view wx:if="{{order}}" class="actions card">
+      <button wx:if="{{order.status === 'pending'}}" class="action-button primary-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="accept">接单，准备开火</button>
+      <button wx:if="{{order.status === 'accepted'}}" class="action-button primary-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="complete">这顿做好啦</button>
+      <button wx:if="{{order.status === 'pending' || order.status === 'accepted'}}" class="action-button danger-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="cancel">取消订单</button>
+    </view>
+  </block>
+
+  <view wx:if="{{statsVisible}}" class="stats-mask" bindtap="toggleStats"></view>
+  <view wx:if="{{statsVisible}}" class="stats-panel">
+    <view class="between panel-title">
+      <view>店铺数据</view>
+      <view class="panel-close" hover-class="tap-feedback" hover-stay-time="120" bindtap="toggleStats">收起</view>
+    </view>
+    <view class="stat-row"><text>店铺评分</text><text class="stat-value">{{stats.rating}}</text></view>
+    <view class="stat-row"><text>累计完成</text><text class="stat-value">{{stats.completedCount}} 单</text></view>
+    <view class="stat-row"><text>收到评价</text><text class="stat-value">{{stats.reviewCount}} 条</text></view>
+    <view class="stat-row"><text>最受欢迎</text><text class="stat-value">{{stats.favoriteDish}}</text></view>
+  </view>
+  <role-tab-bar current="/pages/chef/chef" />
+</view>

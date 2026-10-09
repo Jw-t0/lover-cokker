@@ -1,0 +1,146 @@
+<view class="home page">
+  <view class="top">
+    <view class="mini-title">爱心饭堂</view>
+    <view class="mine-link" aria-label="我的" hover-class="pressing" hover-stay-time="120" bindtap="goMine">
+      <view class="mine-avatar" aria-hidden="true">
+        <view class="mine-avatar-head"></view>
+        <view class="mine-avatar-shoulders"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="hero">
+    <view class="hero-copy">
+      <view class="badge">DINNER TIME · TODAY</view>
+      <view wx:if="{{homeOrder}}" class="title">{{homeOrder.homeState.title}}</view>
+      <view wx:else class="title">想和你一起吃</view>
+      <view wx:if="{{homeOrder}}" class="subtitle">{{homeOrder.homeState.desc}}</view>
+      <view wx:else class="subtitle">菜单已经备好</view>
+    </view>
+    <view class="hero-visual" aria-hidden="true">
+      <view class="hero-visual-plate"><text class="hero-visual-emoji">🍓</text></view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="home-loading">
+    <view class="loading-emoji">🍓</view>
+    <view class="loading-title">正在准备今天的饭桌</view>
+    <view class="loading-desc">菜单马上就好</view>
+  </view>
+
+  <block wx:else>
+  <view wx:if="{{homeError}}" class="home-error card">
+    <view class="section-title">饭桌暂时打不开</view>
+    <view class="muted">{{homeError}}</view>
+    <button class="soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="retryLoad">重新加载</button>
+  </view>
+  <view wx:if="{{homeOrder}}" class="active-meal" hover-class="pressing" hover-stay-time="120" bindtap="goMyOrder">
+    <view wx:if="{{homeOrder.status === 'pending'}}" class="meal-pending">待接单 · 已送达厨房</view>
+    <view class="meal-top">
+      <view>
+        <view class="meal-title">{{homeOrder.homeState.action}}</view>
+        <view class="meal-desc">{{homeOrder.items.length}} 道菜 · ¥{{homeOrder.totalPrice}}</view>
+      </view>
+      <view class="meal-icon-wrap">
+        <view class="meal-state-sticker state-{{homeOrder.status}}">{{homeOrder.status === 'pending' ? '📮' : (homeOrder.status === 'accepted' ? '✨' : '♡')}}</view>
+        <view class="meal-icon">🍲</view>
+      </view>
+    </view>
+    <view class="meal-progress">
+      <view class="progress-step {{homeOrder.status === 'pending' ? '' : 'done'}}">送达厨房</view>
+      <view class="progress-step {{homeOrder.status === 'accepted' || homeOrder.status === 'completed' ? 'done' : ''}}">制作中</view>
+      <view class="progress-step {{homeOrder.status === 'completed' ? 'done' : ''}}">开饭</view>
+    </view>
+    <view class="meal-items">
+      <view wx:for="{{homeOrder.previewItems}}" wx:key="cartKey" class="meal-item">
+        <text>{{item.name}} × {{item.quantity}}</text>
+        <text>¥{{item.subtotal}}</text>
+      </view>
+    </view>
+  </view>
+
+  <block wx:else>
+    <view class="order-entry" hover-class="pressing" hover-stay-time="120" bindtap="goOrder">
+      <view>
+        <view class="entry-title">翻开菜单</view>
+        <view class="entry-desc">把想吃的告诉厨房</view>
+        <view class="entry-note">挑好菜，厨房马上收到</view>
+      </view>
+      <view class="entry-emoji">🍝</view>
+    </view>
+
+    <view wx:if="{{recommendedDishes.length}}" class="recommend-section">
+      <view class="section-heading"><text>推荐菜</text><view class="section-link" hover-class="pressing" hover-stay-time="120" bindtap="goOrder">查看全部 ›</view></view>
+      <view class="table-runner"><text>🍓</text><view></view><text>✦</text><view></view><text>🍓</text></view>
+      <view class="recommend-grid">
+        <view wx:for="{{recommendedDishes}}" wx:key="_id" data-id="{{item._id || item.id}}" class="recommend-card" hover-class="pressing" hover-stay-time="120" bindtap="goRecommendedDish">
+          <view class="recommend-emoji">{{item.emoji || '🍽️'}}</view>
+          <view class="recommend-name">{{item.name}}</view>
+          <view class="recommend-price">¥{{item.price}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{homeOrder && (homeOrder.status === 'pending' || homeOrder.status === 'accepted')}}" class="add-more" hover-class="pressing" hover-stay-time="120" bindtap="goOrder">
+    <view><view class="add-more-title">想再加一道菜？</view><view class="add-more-desc">会加到当前这顿饭里</view></view>
+    <view class="add-more-go">去点菜 ›</view>
+  </view>
+
+  <view wx:if="{{homeOrder && homeOrder.status === 'completed'}}" class="add-more" hover-class="pressing" hover-stay-time="120" bindtap="goMyOrder">
+    <view><view class="add-more-title">这顿饭做好啦</view><view class="add-more-desc">去给主厨打个分吧</view></view>
+    <view class="add-more-go">去评价 ›</view>
+  </view>
+
+  <view class="meal-table-section">
+    <view class="table-section-heading"><text>我们的饭桌</text><view class="section-link" hover-class="pressing" hover-stay-time="120" bindtap="goHistory">看记录 ›</view></view>
+    <view class="quick-grid">
+      <view class="quick-card" hover-class="pressing" hover-stay-time="120" bindtap="goChef"><view class="quick-title">进入厨房</view><view class="quick-desc">查看新订单和菜单</view><view class="quick-emoji">🥘</view></view>
+      <view class="quick-card" hover-class="pressing" hover-stay-time="120" bindtap="goHistory"><view class="quick-title">我的饭单</view><view class="quick-desc">回看吃过的每一顿</view><view class="quick-emoji">🧾</view></view>
+    </view>
+  </view>
+
+  <view wx:if="{{!homeOrder}}" class="no-order-note">
+    <text class="note-emoji">🍓</text>
+    <view class="no-order-note-copy">
+      <view class="note-title">今天也要好好吃饭</view>
+      <view class="note-desc">挑好菜，厨房马上收到</view>
+    </view>
+  </view>
+  </block>
+
+  <view wx:if="{{modeChoiceVisible}}" class="mode-choice-wrap">
+    <view class="mode-choice-mask" bindtap="closeModeChoice"></view>
+    <view class="mode-choice-sheet" catchtap="stopModeChoiceTap">
+      <view class="mode-choice-handle"></view>
+      <view class="mode-choice-kicker">今晚怎么吃</view>
+      <view class="mode-choice-title">先选一种方式</view>
+      <view class="mode-choice-subtitle">和 TA 一起开饭，或者先自己试试饭堂</view>
+      <view class="mode-choice-options">
+        <view class="mode-choice-option mode-choice-solo" hover-class="pressing" hover-stay-time="120" bindtap="chooseSoloMode">
+          <view class="mode-choice-icon">🍓</view>
+          <view class="mode-choice-copy">
+            <view class="mode-choice-option-title">进入单人体验</view>
+            <view class="mode-choice-option-desc">自己点菜，也可以自己去厨房接单</view>
+          </view>
+          <view class="mode-choice-arrow">›</view>
+        </view>
+        <view class="mode-choice-option mode-choice-invite" hover-class="pressing" hover-stay-time="120" bindtap="chooseInviteMode">
+          <view class="mode-choice-icon">♡</view>
+          <view class="mode-choice-copy">
+            <view class="mode-choice-option-title">邀请情侣</view>
+            <view class="mode-choice-option-desc">发一张邀请卡，和 TA 共享这张饭桌</view>
+          </view>
+          <view class="mode-choice-arrow">›</view>
+        </view>
+      </view>
+      <view class="mode-choice-cancel" hover-class="pressing" hover-stay-time="120" bindtap="closeModeChoice">先等等</view>
+    </view>
+  </view>
+  <profile-choice-sheet
+    visible="{{profileChoiceVisible}}"
+    bind:complete="chooseProfileForInvite"
+    bind:direct="sendInviteDirectly"
+    bind:close="closeProfileChoice"
+  />
+</view>

@@ -1,0 +1,50 @@
+.history-button {
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 999rpx;
+  border: 0;
+  background: #ffe3ea;
+  color: #c94c6c;
+  font-size: 30rpx;
+  font-weight: 900;
+  margin: 0 0 44rpx;
+}
+
+.action-block {
+  margin-top: 34rpx;
+}
+
+.order-action-button {
+  margin: 0 0 34rpx;
+}
+
+.notice {
+  padding: 38rpx;
+  margin-top: 34rpx;
+  background: #ffe3ea;
+  border: 0;
+  box-shadow: none;
+}
+
+.notice-title,
+.section-title {
+  color: #c94c6c;
+  font-size: 32rpx;
+  font-weight: 900;
+  margin-bottom: 16rpx;
+}
+
+.notice-desc {
+  color: #9a918b;
+  font-size: 28rpx;
+}
+
+.review {
+  padding: 40rpx;
+  margin-top: 34rpx;
+}
+
+.review-button,
+.go-order {
+  margin-top: 32rpx;
+}

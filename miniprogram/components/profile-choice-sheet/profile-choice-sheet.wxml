@@ -1,0 +1,28 @@
+<view wx:if="{{visible}}" class="profile-choice-wrap">
+  <view class="profile-choice-mask" bindtap="close"></view>
+  <view class="profile-choice-sheet" catchtap="stopTap">
+    <view class="profile-choice-handle"></view>
+    <view class="profile-choice-kicker">邀请情侣</view>
+    <view class="profile-choice-title">先让邀请卡好看一点</view>
+    <view class="profile-choice-subtitle">头像和昵称会展示给TA，也可以先直接发送</view>
+    <view class="profile-choice-options">
+      <view class="profile-choice-option profile-choice-complete" hover-class="tap-feedback" hover-stay-time="120" bindtap="chooseProfile">
+        <view class="profile-choice-icon">✦</view>
+        <view class="profile-choice-copy">
+          <view class="profile-choice-option-title">填写个人资料</view>
+          <view class="profile-choice-option-desc">设置头像和昵称，邀请卡会更有专属感</view>
+        </view>
+        <view class="profile-choice-arrow">›</view>
+      </view>
+      <view class="profile-choice-option profile-choice-direct" hover-class="tap-feedback" hover-stay-time="120" bindtap="chooseDirect">
+        <view class="profile-choice-icon">♡</view>
+        <view class="profile-choice-copy">
+          <view class="profile-choice-option-title">直接发送</view>
+          <view class="profile-choice-option-desc">不填写会使用默认头像和昵称，邀请卡效果会简单一些</view>
+        </view>
+        <view class="profile-choice-arrow">›</view>
+      </view>
+    </view>
+    <view class="profile-choice-cancel" hover-class="tap-feedback" hover-stay-time="120" bindtap="close">先等等</view>
+  </view>
+</view>

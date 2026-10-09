@@ -1,0 +1,132 @@
+.action-row {
+  display: flex;
+  gap: 18rpx;
+  margin-bottom: 26rpx;
+}
+
+.add,
+.add-category,
+.reset {
+  height: 86rpx;
+  flex: 1;
+  min-width: 0;
+  font-size: 28rpx;
+}
+
+.add-category {
+  flex: 0.7;
+}
+
+.category-tabs {
+  width: 100%;
+  white-space: nowrap;
+  margin: 0 -32rpx 22rpx;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+}
+
+.tab-track {
+  display: inline-flex;
+  gap: 16rpx;
+  padding: 2rpx 0 14rpx;
+}
+
+.category-tab {
+  min-width: 126rpx;
+  height: 72rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  padding: 0 24rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.84);
+  border: 2rpx solid #f5c3d0;
+  color: #8d8580;
+  box-sizing: border-box;
+}
+
+.category-tab.active {
+  background: #4d373e;
+  border-color: #4d373e;
+  color: #ffffff;
+  box-shadow: 0 14rpx 28rpx rgba(43, 41, 40, 0.13);
+}
+
+.tab-name {
+  max-width: 132rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.tab-count {
+  min-width: 34rpx;
+  height: 34rpx;
+  line-height: 34rpx;
+  text-align: center;
+  border-radius: 999rpx;
+  background: #ffe3ea;
+  color: #c94c6c;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.category-tab.active .tab-count {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.list {
+  margin-top: 12rpx;
+}
+
+.category-section {
+  margin-bottom: 34rpx;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.category-title {
+  font-size: 32rpx;
+  font-weight: 900;
+  color: #4d373e;
+  line-height: 1.2;
+}
+
+.category-hint {
+  margin-top: 6rpx;
+  color: #9a918b;
+  font-size: 23rpx;
+}
+
+.category-count {
+  min-width: 86rpx;
+  height: 46rpx;
+  line-height: 46rpx;
+  text-align: center;
+  border-radius: 999rpx;
+  background: #ffe3ea;
+  color: #c94c6c;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.category-empty {
+  padding: 42rpx 28rpx;
+  margin-bottom: 22rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.72);
+  color: #9a918b;
+  text-align: center;
+  font-size: 26rpx;
+}
+
+.initialize-menu { width: 100%; margin: 0 0 34rpx; }

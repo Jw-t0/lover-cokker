@@ -1,0 +1,84 @@
+<view class="page confirm-page">
+  <view wx:if="{{submittedOrder}}" class="share-success card">
+    <view class="share-success-icon">♡</view>
+    <view class="page-title">订单已提交</view>
+    <view class="page-subtitle">{{submittedOrder.soloMode ? '去厨房接单，开始准备这顿饭' : '发给 TA，让这顿饭尽快开火'}}</view>
+    <button wx:if="{{!submittedOrder.soloMode}}" class="share-order-button primary-button" hover-class="tap-feedback" hover-stay-time="120" open-type="share">发给 TA</button>
+    <button class="share-later-button {{submittedOrder.soloMode ? 'primary-button' : 'soft-button'}}" hover-class="tap-feedback" hover-stay-time="120" bindtap="finishSubmission">{{submittedOrder.soloMode ? '去厨房接单' : '查看订单'}}</button>
+  </view>
+
+  <block wx:else>
+  <view class="confirm-header">
+    <view class="page-title">{{isAddingDish ? '确认加菜' : '确认订单'}}</view>
+    <view class="page-subtitle">{{isAddingDish ? '会加到你当前这单里，厨师继续看同一张单' : '再看一眼，确认后厨师就收到啦'}}</view>
+  </view>
+
+  <view wx:if="{{cart.length}}" class="order-section">
+    <view class="section-heading">
+      <view>菜品总览</view>
+      <view class="section-count">{{summary.count}} 份</view>
+    </view>
+    <view class="dish-overview card">
+      <view wx:for="{{cart}}" wx:key="cartKey" class="overview-row">
+        <view class="dish-image">
+          <image wx:if="{{item.imageUrl}}" class="dish-photo" src="{{item.imageUrl}}" mode="aspectFill"></image>
+          <text wx:else>{{item.emoji || '🍽️'}}</text>
+        </view>
+        <view class="dish-info">
+          <view class="dish-name">{{item.name}}</view>
+          <view wx:if="{{item.tasteText}}" class="taste-text">{{item.tasteText}}</view>
+          <view class="dish-price">¥ {{item.subtotal}}</view>
+        </view>
+        <view class="stepper">
+          <button class="stepper-button" hover-class="tap-feedback" hover-stay-time="120" data-id="{{item.cartKey || item.dishId}}" bindtap="decreaseDish">-</button>
+          <text class="stepper-count">{{item.quantity}}</text>
+          <button class="stepper-button" hover-class="tap-feedback" hover-stay-time="120" data-id="{{item.cartKey || item.dishId}}" bindtap="increaseDish">+</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:else class="empty-card card">
+    <view class="empty-icon">♡</view>
+    <view class="empty-title">还没有选菜</view>
+    <view class="empty-desc">返回点菜页挑几道喜欢的吧</view>
+    <button class="soft-button empty-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="goBack">返回点菜</button>
+  </view>
+
+  <view wx:if="{{cart.length}}" class="remark-section card">
+    <view class="section-heading remark-heading">
+      <view>口味备注</view>
+      <view class="optional-text">选填</view>
+    </view>
+    <view class="quick-list">
+      <view class="quick-tag" wx:for="{{quickRemarks}}" wx:key="*this" data-text="{{item}}" hover-class="tap-feedback" hover-stay-time="120" bindtap="appendRemark">{{item}}</view>
+    </view>
+    <view class="custom-remark-row">
+      <input class="custom-remark-input" value="{{customRemarkInput}}" bindinput="onCustomRemarkInput" placeholder="添加自己的常用备注" />
+    <button class="custom-remark-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="addCustomRemark">添加</button>
+    </view>
+    <textarea class="textarea remark-textarea" value="{{remark}}" bindinput="onRemark" placeholder="例如：少辣、多放葱、不吃香菜"></textarea>
+  </view>
+
+  <view wx:if="{{cart.length}}" class="price-summary card">
+    <view class="price-row">
+      <text>菜品数量</text>
+      <text>{{summary.count}} 份</text>
+    </view>
+    <view class="price-row total-row">
+      <text>合计</text>
+      <text class="total-price">¥ {{summary.totalPrice}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{cart.length}}" class="confirm-bar">
+    <view class="bar-summary">
+      <view class="bar-label">合计</view>
+      <view class="bar-price">¥ {{summary.totalPrice}}</view>
+    </view>
+    <button class="confirm-button {{submitting ? 'disabled-button' : 'primary-button'}}" hover-class="tap-feedback" hover-stay-time="120" disabled="{{submitting}}" bindtap="submitOrder">
+      {{submitting ? '提交中' : (isAddingDish ? '确认加菜' : '确认提交')}}
+    </button>
+  </view>
+  </block>
+</view>

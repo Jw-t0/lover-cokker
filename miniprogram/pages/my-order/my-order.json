@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "我的订单",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "order-card": "/components/order-card/order-card",
+    "empty-state": "/components/empty-state/empty-state",
+    "rating-stars": "/components/rating-stars/rating-stars",
+    "role-tab-bar": "/components/role-tab-bar/role-tab-bar"
+  }
+}

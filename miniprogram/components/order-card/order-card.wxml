@@ -1,0 +1,21 @@
+<view wx:if="{{order}}" class="order-card card">
+  <view class="status-bar status-{{order.status}}">当前状态：{{order.statusText || order.status}}</view>
+  <view wx:if="{{createdAtText}}" class="order-date">下单时间：{{createdAtText}}</view>
+  <view class="section-title">{{title}}</view>
+  <view wx:for="{{order.items}}" wx:key="cartKey" class="item-row">
+    <view class="item-main">
+      <view>{{item.name}} × {{item.quantity}}</view>
+      <view wx:if="{{item.tasteText}}" class="item-taste">{{item.tasteText}}</view>
+    </view>
+    <text>¥ {{item.subtotal}}</text>
+  </view>
+  <view class="section-title">口味备注</view>
+  <view class="remark">{{order.remark || '没有备注'}}</view>
+  <view wx:if="{{order.status === 'cancelled'}}" class="cancel-reason">取消原因：{{order.cancelReason || '未填写原因'}}</view>
+  <view wx:if="{{order.review}}" class="review-box">
+    <view class="section-title">客人评价</view>
+    <view class="review-rating">评分：{{order.review.rating}} 分</view>
+    <view class="remark">{{order.review.content || '没有写评价内容'}}</view>
+  </view>
+  <view class="total">合计：<text class="total-price">¥ {{order.totalPrice}}</text></view>
+</view>

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "爱心饭堂",
+  "usingComponents": {
+    "profile-choice-sheet": "/components/profile-choice-sheet/profile-choice-sheet"
+  }
+}

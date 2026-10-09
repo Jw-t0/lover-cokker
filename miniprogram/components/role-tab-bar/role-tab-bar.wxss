@@ -1,0 +1,54 @@
+.role-tab-safe {
+  height: 144rpx;
+}
+
+.role-tab-bar {
+  position: fixed;
+  left: 20rpx;
+  right: 20rpx;
+  bottom: calc(14rpx + env(safe-area-inset-bottom));
+  z-index: 60;
+  height: 112rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10rpx 8rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.96);
+  border: 2rpx solid #f1dce1;
+  box-shadow: 0 16rpx 38rpx rgba(132, 68, 88, 0.15);
+  box-sizing: border-box;
+  animation: page-enter 260ms cubic-bezier(.22, 1, .36, 1) 100ms both;
+}
+
+.role-tab-item {
+  flex: 1;
+  height: 90rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  border-radius: 18rpx;
+  color: #9a7f87;
+  box-sizing: border-box;
+}
+
+.role-tab-item.active {
+  background: #ffe3ea;
+  color: #ff7297;
+  transform: translateY(-2rpx);
+}
+
+.role-tab-icon {
+  height: 34rpx;
+  line-height: 34rpx;
+  font-size: 28rpx;
+}
+
+.role-tab-text {
+  height: 30rpx;
+  line-height: 30rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+}

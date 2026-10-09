@@ -1,0 +1,14 @@
+.stars {
+  display: flex;
+  gap: 16rpx;
+  padding: 28rpx 0;
+}
+
+.star {
+  font-size: 64rpx;
+  color: #dedede;
+}
+
+.stars .active {
+  color: #ffc400;
+}

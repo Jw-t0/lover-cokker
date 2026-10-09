@@ -1,0 +1,36 @@
+<view class="page detail-page">
+  <view wx:if="{{loading}}" class="card detail-loading">正在打开菜品详情</view>
+  <view wx:elif="{{error}}" class="card detail-error">
+    <view class="section-title">菜品详情打不开</view>
+    <view class="muted">{{error}}</view>
+  </view>
+  <view wx:elif="{{dish}}" class="detail">
+    <view class="hero card">
+      <view class="dish-image">
+        <image wx:if="{{dish.imageUrl}}" class="dish-photo" src="{{dish.imageUrl}}" mode="aspectFill"></image>
+        <text wx:else>{{dish.emoji || '🍽️'}}</text>
+      </view>
+      <view class="dish-main">
+        <view class="page-title">{{dish.name}}</view>
+        <view class="tag">{{dish.categoryName || '菜品'}}</view>
+        <view class="price">¥ {{dish.price}}</view>
+      </view>
+    </view>
+
+    <view class="info card">
+      <view class="section-title">菜品描述</view>
+      <view class="content">{{dish.description || '暂无描述'}}</view>
+      <view class="section-title">配料</view>
+      <view class="content">{{dish.ingredients || '厨师还没填写配料'}}</view>
+      <view class="section-title">做法</view>
+      <view class="content">{{dish.method || '厨师还没填写做法'}}</view>
+      <view class="section-title">可选口味</view>
+      <view class="taste-list">
+        <text wx:for="{{dish.tasteOptions}}" wx:key="*this" class="taste-tag">{{item}}</text>
+        <text wx:if="{{!dish.tasteOptions || !dish.tasteOptions.length}}" class="muted">暂无可选口味</text>
+      </view>
+    </view>
+    <button wx:if="{{canOrder && dish.status !== 'offline'}}" class="primary-button detail-order-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="addToOrder">加入点餐</button>
+  </view>
+  <empty-state wx:else title="没有找到菜品" desc="回到菜单再试一次" />
+</view>

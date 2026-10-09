@@ -1,0 +1,78 @@
+<view class="page">
+  <view class="page-title">情侣关系</view>
+  <view class="page-subtitle">这里记录你们共享小饭桌的绑定状态</view>
+
+  <view wx:if="{{loading}}" class="status-card">正在查看你们的关系</view>
+  <view wx:elif="{{error}}" class="status-card">
+    <view class="status-title">关系暂时打不开</view>
+    <view class="status-desc">{{error}}</view>
+    <button class="primary-button invite-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="retry">重新加载</button>
+  </view>
+  <block wx:else>
+  <view class="relationship card">
+    <view class="person">
+      <view class="avatar">
+        <image wx:if="{{user.avatarUrl}}" class="avatar-image" src="{{user.avatarUrl}}" mode="aspectFill"></image>
+        <text wx:else>♡</text>
+      </view>
+      <view class="person-name">{{user.nickname || '我'}}</view>
+      <view class="person-role">顾客 / 厨师</view>
+    </view>
+
+    <view class="heart-line">♡</view>
+
+    <view wx:if="{{couple && partner}}" class="person">
+      <view class="avatar partner-avatar">
+        <image wx:if="{{partner.avatarUrl}}" class="avatar-image" src="{{partner.avatarUrl}}" mode="aspectFill"></image>
+        <text wx:else>♡</text>
+      </view>
+      <view class="person-name">{{partner.nickname || 'TA'}}</view>
+      <view class="person-role">另一半</view>
+    </view>
+
+    <view wx:elif="{{pendingCouple && partner}}" class="person">
+      <view class="avatar partner-avatar">
+        <image wx:if="{{partner.avatarUrl}}" class="avatar-image" src="{{partner.avatarUrl}}" mode="aspectFill"></image>
+        <text wx:else>♡</text>
+      </view>
+      <view class="person-name">{{partner.nickname || 'TA'}}</view>
+      <view class="person-role">待恢复</view>
+    </view>
+
+    <view wx:else class="person empty-person">
+      <view class="avatar empty-avatar">?</view>
+      <view class="person-name">等待TA加入</view>
+      <view class="person-role">还没有绑定另一半</view>
+    </view>
+  </view>
+
+  <view wx:if="{{couple && partner}}" class="status-card">
+    <view class="status-title">{{couple && partner ? '情侣空间已开启' : '还差一步'}}</view>
+    <view class="status-desc">
+      {{couple && partner ? '你们已经共享菜单、订单和点菜记录。谁下单，另一半就会成为厨师。' : '生成邀请并转发给TA，TA接受后就会出现在这里。'}}
+    </view>
+    <view class="relationship-actions">
+      <button class="primary-button invite-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="createInvite">再次邀请</button>
+      <button class="danger-button invite-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="dissolveRelationship">解除关系</button>
+    </view>
+  </view>
+
+  <view wx:elif="{{pendingCouple && partner}}" class="status-card pending-status-card">
+    <view class="status-title">关系已解除</view>
+    <view class="status-desc">订单记录会保留到 {{pendingDeleteAtText}}。在 30 天内邀请TA恢复关系，历史订单不会被删除。</view>
+    <button class="primary-button invite-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="createInvite">邀请TA恢复关系</button>
+  </view>
+
+  <view wx:else class="status-card">
+    <view class="status-title">还差一步</view>
+    <view class="status-desc">生成邀请并转发给TA，TA接受后就会出现在这里。</view>
+    <button class="primary-button invite-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="createInvite">邀请TA加入</button>
+  </view>
+  </block>
+  <profile-choice-sheet
+    visible="{{profileChoiceVisible}}"
+    bind:complete="chooseProfileForInvite"
+    bind:direct="sendInviteDirectly"
+    bind:close="closeProfileChoice"
+  />
+</view>

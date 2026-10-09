@@ -1,0 +1,48 @@
+<view class="invite-page">
+  <view class="nav-home" hover-class="tap-feedback" hover-stay-time="120" bindtap="goHome">⌂</view>
+
+  <view wx:if="{{loading}}" class="invite-card invite-loading-card">
+    <view class="invite-loading-mark">♡</view>
+    <view class="invite-loading-title">正在准备邀请卡</view>
+    <view class="invite-loading-desc">把你们的小饭桌端上来</view>
+  </view>
+
+  <view wx:elif="{{inviteError}}" class="invite-card invite-error-card">
+    <view class="invite-loading-mark">!</view>
+    <view class="invite-loading-title">邀请暂时打不开</view>
+    <view class="invite-loading-desc">{{inviteError}}</view>
+    <button class="invite-action primary-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="retryLoad">重新加载</button>
+    <button class="later" hover-class="tap-feedback" hover-stay-time="120" bindtap="goHome">回到饭桌</button>
+  </view>
+
+  <view wx:else class="invite-card">
+    <view class="invite-kicker">OUR LITTLE TABLE</view>
+    <view class="seal">♡</view>
+    <view class="card-rule"></view>
+
+    <view class="avatar">
+      <image wx:if="{{creator.avatarUrl}}" class="avatar-image" src="{{creator.avatarUrl}}" mode="aspectFill"></image>
+      <text wx:else>♡</text>
+    </view>
+    <view class="name">{{creator.nickname && creator.nickname !== '还没有昵称' ? creator.nickname : '你的另一半'}}</view>
+    <view class="title">邀请你一起<br />吃好每一顿饭</view>
+    <view class="desc">加入专属的情侣小饭桌，共享菜单、订单和日常的好胃口。</view>
+    <view class="expire">邀请有效期至 {{expiredText || '未知'}}</view>
+
+    <view wx:if="{{unavailableReason}}" class="recipient-actions">
+      <view class="forward-hint">{{unavailableReason}}</view>
+      <button wx:if="{{selfInvite}}" class="invite-action primary-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="recreateInvite">重新生成邀请</button>
+      <button wx:else class="later" hover-class="tap-feedback" hover-stay-time="120" bindtap="goHome">回到饭桌</button>
+    </view>
+    <view wx:elif="{{selfInvite}}" class="creator-actions">
+      <view class="forward-hint">把这份邀请转发给 TA，TA 打开后即可加入</view>
+      <button class="invite-action primary-button" hover-class="tap-feedback" hover-stay-time="120" open-type="share">转发给 TA</button>
+    </view>
+    <view wx:else class="recipient-actions">
+      <button wx:if="{{canAccept}}" class="invite-action primary-button" hover-class="tap-feedback" hover-stay-time="120" disabled="{{accepting}}" bindtap="accept">{{accepting ? '加入中' : '接受邀请'}}</button>
+      <button class="later" hover-class="tap-feedback" hover-stay-time="120" bindtap="later">暂不接受</button>
+    </view>
+  </view>
+
+  <view class="card-footer">LOVE, MADE DAILY</view>
+</view>

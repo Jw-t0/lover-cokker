@@ -1,0 +1,58 @@
+<view class="page">
+  <view class="page-title">菜单管理</view>
+  <view class="page-subtitle">添加菜品、编辑信息、换图和上下架</view>
+  <view class="action-row">
+    <button class="primary-button add" hover-class="tap-feedback" hover-stay-time="120" bindtap="addDish">+ 添加菜</button>
+    <button class="soft-button add-category" hover-class="tap-feedback" hover-stay-time="120" bindtap="addCategory">+ 分类</button>
+    <button class="soft-button reset" hover-class="tap-feedback" hover-stay-time="120" bindtap="resetMenu">补齐默认</button>
+  </view>
+
+  <view wx:if="{{loading}}" class="category-empty card">正在整理你们的菜单</view>
+  <view wx:elif="{{error}}" class="category-empty card">
+    <view>{{error}}</view>
+    <button class="soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="retry">重新加载</button>
+  </view>
+
+  <scroll-view wx:if="{{!loading && !error && menuGroups.length}}" class="category-tabs" scroll-x enable-flex>
+    <view class="tab-track">
+      <view
+        wx:for="{{menuGroups}}"
+        wx:key="_id"
+        data-id="{{item.id}}"
+        hover-class="tap-feedback"
+        hover-stay-time="120"
+        bindtap="selectCategory"
+        class="category-tab {{selectedCategoryId === item.id ? 'active' : ''}}"
+      >
+        <text class="tab-name">{{item.name}}</text>
+        <text class="tab-count">{{item.dishes.length}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{!loading && !error}}" class="list">
+    <view wx:if="{{menuGroups.length}}" class="category-section">
+      <view class="category-header">
+        <view>
+          <view class="category-title">{{selectedGroup.name}}</view>
+          <view class="category-hint">当前分类</view>
+        </view>
+        <view class="category-count">{{selectedGroup.dishes.length}} 道</view>
+      </view>
+      <view wx:if="{{!selectedGroup.dishes.length}}" class="category-empty">这个分类还没有菜</view>
+      <dish-card
+        wx:for="{{selectedGroup.dishes}}"
+        wx:for-item="dish"
+        wx:key="_id"
+        dish="{{dish}}"
+        manage="{{true}}"
+        bind:edit="editDish"
+        bind:toggle="toggleDish"
+        bind:delete="deleteDish"
+        bind:detail="goDishDetail"
+      />
+    </view>
+    <empty-state wx:if="{{!dishes.length}}" title="还没有菜" desc="先准备默认菜单，或添加一道拿手菜吧" />
+    <button wx:if="{{!dishes.length}}" class="primary-button initialize-menu" hover-class="tap-feedback" hover-stay-time="120" bindtap="initializeMenu">初始化默认菜单</button>
+  </view>
+</view>

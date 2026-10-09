@@ -1,0 +1,113 @@
+<view class="page order-page">
+  <view class="order-header">
+    <view>
+      <view class="page-title">今天想吃什么？</view>
+      <view class="page-subtitle">挑好菜，厨师马上开工</view>
+    </view>
+  </view>
+
+  <view class="menu-layout">
+    <view wx:if="{{!loading}}" class="categories card">
+      <view
+        data-id="all"
+        bindtap="selectCategory"
+        hover-class="tap-feedback"
+        hover-stay-time="120"
+        class="category {{selectedCategoryId === 'all' ? 'active' : ''}}"
+      >
+        <view wx:if="{{selectedCategoryId === 'all'}}" class="category-line"></view>
+        <text class="category-name">全部</text>
+      </view>
+      <view
+        wx:for="{{categories}}"
+        wx:key="_id"
+        data-id="{{item._id}}"
+        bindtap="selectCategory"
+        hover-class="tap-feedback"
+        hover-stay-time="120"
+        class="category {{selectedCategoryId === item._id ? 'active' : ''}}"
+      >
+        <view wx:if="{{selectedCategoryId === item._id}}" class="category-line"></view>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </view>
+
+    <view class="dish-list">
+      <view wx:if="{{loading}}" class="menu-loading card">
+        <view class="loading-icon">♡</view>
+        <view class="loading-title">菜单加载中</view>
+        <view class="loading-desc">正在把今天的菜端上来</view>
+      </view>
+      <block wx:else>
+        <dish-card
+          wx:for="{{displayDishes}}"
+          wx:key="_id"
+          dish="{{item}}"
+          quantity="{{item.quantity}}"
+          bind:add="addDish"
+          bind:decrease="decreaseDish"
+          bind:detail="goDishDetail"
+        />
+        <empty-state wx:if="{{!loading && !displayDishes.length}}" title="还没有菜" desc="先让厨师添加一道吧" />
+      </block>
+    </view>
+  </view>
+
+  <view wx:if="{{menuError}}" class="menu-error card">
+    <view class="section-title">菜单暂时不可用</view>
+    <view class="muted">{{menuError}}</view>
+    <button class="soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="retryLoad">重新加载</button>
+    <button class="soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="goHome">回到饭桌</button>
+  </view>
+
+  <view wx:if="{{menuNotice}}" class="menu-notice card">
+    <view class="section-title">菜单补齐提醒</view>
+    <view class="muted">{{menuNotice}}</view>
+    <button class="soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="retryLoad">重新补齐</button>
+  </view>
+
+  <view wx:if="{{!loading && !cartVisible && !tastePanelVisible}}" class="cart-bar">
+    <view class="cart-summary">
+      <view class="summary {{cartCountBump ? 'cart-count-bump' : ''}}">已选 {{summary.count}} 份，共 ¥{{summary.totalPrice}}</view>
+      <view class="cart-link" hover-class="tap-feedback" hover-stay-time="120" bindtap="openCart">购物车</view>
+    </view>
+    <view class="checkout-slot">
+      <button class="bar-button checkout-button {{summary.count > 0 ? 'primary-button' : 'disabled-button'}}" hover-class="tap-feedback" hover-stay-time="120" disabled="{{summary.count === 0}}" bindtap="goOrderConfirm">
+        <text>确认订单</text>
+        <text class="checkout-arrow">›</text>
+      </button>
+    </view>
+  </view>
+
+  <cart-sheet
+    visible="{{cartVisible}}"
+    cart="{{cart}}"
+    bind:close="closeCart"
+    bind:clear="clearCart"
+    bind:decrease="onCartDecrease"
+    bind:increase="onCartIncrease"
+    bind:submit="goOrderConfirm"
+  />
+
+  <view wx:if="{{tastePanelVisible}}" class="taste-mask" bindtap="closeTastePanel"></view>
+  <view wx:if="{{tastePanelVisible}}" class="taste-panel">
+    <view class="taste-title">{{pendingDish.name}}</view>
+    <view class="taste-desc">选择这道菜的口味</view>
+    <view class="taste-options">
+      <view
+        wx:for="{{tasteOptionsForPanel}}"
+        wx:key="name"
+        data-taste="{{item.name}}"
+        bindtap="toggleTaste"
+        hover-class="tap-feedback"
+        hover-stay-time="120"
+        class="taste-option {{item.selected ? 'selected' : ''}}"
+      >{{item.name}}</view>
+    </view>
+    <view class="taste-actions">
+      <button class="taste-cancel" hover-class="tap-feedback" hover-stay-time="120" bindtap="closeTastePanel">取消</button>
+      <button class="taste-confirm primary-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="confirmTaste">加入</button>
+    </view>
+  </view>
+  <role-tab-bar wx:if="{{!cartVisible && !tastePanelVisible}}" current="/pages/order/order" />
+</view>

@@ -1,0 +1,55 @@
+<view class="page report-page">
+  <view class="page-title">月度点菜汇报</view>
+  <picker mode="date" fields="month" value="{{month}}" bindchange="onMonthChange">
+    <view class="page-subtitle month-picker">{{month}} 的小饭桌记录⌄</view>
+  </picker>
+
+  <view wx:if="{{loading}}" class="card loading-card">
+    <view class="heart">♡</view>
+    <view>正在整理这个月吃过的菜</view>
+  </view>
+
+  <view wx:elif="{{error}}" class="card report-error">
+    <view class="section-title">月报暂时打不开</view>
+    <view class="muted">{{error}}</view>
+    <button class="soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="loadReport">重新加载</button>
+    <button class="soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="goHome">回到饭桌</button>
+  </view>
+
+  <view wx:elif="{{report}}" class="report">
+    <view class="summary-card card">
+      <view>
+        <view class="summary-label">本月订单</view>
+        <view class="summary-value">{{report.orderCount}} 单</view>
+      </view>
+      <view>
+        <view class="summary-label">点过菜品</view>
+        <view class="summary-value">{{report.totalDishes}} 份</view>
+      </view>
+      <view>
+        <view class="summary-label">合计消费</view>
+        <view class="summary-value">¥{{report.totalPrice}}</view>
+      </view>
+    </view>
+
+    <view class="top-card card">
+      <view class="section-title">本月最常点</view>
+      <view class="top-dish">{{report.topDish.name}}</view>
+      <view class="muted">共 {{report.topDish.quantity}} 份</view>
+      <view wx:if="{{report.rating}}" class="muted">评分 {{report.rating}}</view>
+      <view wx:else class="muted">暂未评分</view>
+    </view>
+
+    <view class="dish-list card">
+      <view class="section-title">菜品明细</view>
+      <view wx:for="{{report.dishes}}" wx:key="dishId" class="dish-row">
+        <text>{{item.name}}</text>
+        <text>{{item.quantity}} 份 / ¥{{item.amount}}</text>
+      </view>
+      <empty-state wx:if="{{!report.dishes.length}}" title="这个月还没点菜" desc="去点一顿饭，月报就会热闹起来" />
+    </view>
+
+    <button class="primary-button push" hover-class="tap-feedback" hover-stay-time="120" disabled="{{pushing}}" bindtap="pushReport">{{pushing ? (monthlyNotifyReady ? '生成中' : '刷新中') : (monthlyNotifyReady ? '生成并推送月报' : '刷新月报')}}</button>
+  </view>
+</view>
+<role-tab-bar current="/pages/monthly-report/monthly-report" />

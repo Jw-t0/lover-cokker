@@ -1,0 +1,72 @@
+<view class="page recipes-page">
+  <view class="page-title">菜品大全</view>
+  <view class="page-subtitle">查灵感、看食材和做法</view>
+
+  <view class="search-card">
+    <view class="search-icon">⌕</view>
+    <input class="search-input" value="{{keyword}}" bindinput="onSearchInput" placeholder="搜索菜名、食材、标签" />
+    <view wx:if="{{keyword}}" class="clear-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="clearSearch">×</view>
+  </view>
+
+  <scroll-view class="category-tabs" scroll-x enable-flex>
+    <view class="tab-track">
+      <view
+        data-category="all"
+        hover-class="tap-feedback"
+        hover-stay-time="120"
+        bindtap="selectCategory"
+        class="category-tab {{selectedCategory === 'all' ? 'active' : ''}}"
+      >全部</view>
+      <view
+        wx:for="{{categories}}"
+        wx:key="*this"
+        data-category="{{item}}"
+        hover-class="tap-feedback"
+        hover-stay-time="120"
+        bindtap="selectCategory"
+        class="category-tab {{selectedCategory === item ? 'active' : ''}}"
+      >{{item}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="result-line">共 {{totalCount}} 道菜谱，当前显示 {{visibleCount}} 道</view>
+
+  <view class="recipe-list">
+    <view wx:for="{{recipes}}" wx:key="id" class="recipe-card" data-id="{{item.id}}" hover-class="tap-feedback" hover-stay-time="120" bindtap="toggleRecipe">
+      <view class="recipe-cover">{{item.cover}}</view>
+      <view class="recipe-main">
+        <view class="recipe-top">
+          <view class="recipe-name">{{item.name}}</view>
+          <view class="recipe-side">
+            <view class="recipe-meta">{{item.time}} · {{item.difficulty}}</view>
+            <view class="add-menu-button {{item.added ? 'added' : ''}}" data-id="{{item.id}}" hover-class="tap-feedback" hover-stay-time="120" catchtap="addRecipeToMenu">
+              {{item.added ? '已加入' : (addingRecipeId === item.id ? '添加中' : '加入菜单')}}
+            </view>
+          </view>
+        </view>
+        <view class="recipe-summary">{{item.summary}}</view>
+        <view class="tag-row">
+          <text class="recipe-tag">{{item.category}}</text>
+          <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" class="recipe-tag soft">{{tag}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{expandedId === item.id}}" class="recipe-detail">
+        <view class="detail-title">食材</view>
+        <view class="ingredient-list">
+          <text wx:for="{{item.ingredients}}" wx:key="*this" class="ingredient">{{item}}</text>
+        </view>
+        <view class="detail-title">做法</view>
+        <view wx:for="{{item.steps}}" wx:key="*this" class="step-row">
+          <view class="step-index">{{index + 1}}</view>
+          <view class="step-text">{{item}}</view>
+        </view>
+        <view class="source-line">来源：{{item.sourceName}}</view>
+      </view>
+    </view>
+
+    <empty-state wx:if="{{!recipes.length}}" title="没有找到菜谱" desc="换个关键词试试看" />
+    <button wx:if="{{hasMore}}" class="load-more-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="loadMore">加载更多</button>
+  </view>
+  <role-tab-bar current="/pages/recipes/recipes" />
+</view>

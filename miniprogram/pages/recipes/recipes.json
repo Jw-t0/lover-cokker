@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "菜品大全",
+  "usingComponents": {
+    "empty-state": "/components/empty-state/empty-state",
+    "role-tab-bar": "/components/role-tab-bar/role-tab-bar"
+  }
+}

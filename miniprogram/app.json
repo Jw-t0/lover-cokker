@@ -1,0 +1,28 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/order/order",
+    "pages/order-confirm/order-confirm",
+    "pages/my-order/my-order",
+    "pages/chef/chef",
+    "pages/recipes/recipes",
+    "pages/mine/mine",
+    "pages/couple/couple",
+    "pages/menu-manage/menu-manage",
+    "pages/dish-edit/dish-edit",
+    "pages/dish-detail/dish-detail",
+    "pages/profile/profile",
+    "pages/invite/invite",
+    "pages/history/history",
+    "pages/monthly-report/monthly-report"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#FFF2F5",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "爱心饭堂",
+    "backgroundColor": "#FFF2F5",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

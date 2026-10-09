@@ -1,0 +1,11 @@
+<view class="stars">
+  <view
+    wx:for="{{stars}}"
+    wx:key="*this"
+    data-value="{{item}}"
+    hover-class="tap-feedback"
+    hover-stay-time="120"
+    bindtap="choose"
+    class="star {{item <= value ? 'active' : ''}}"
+  >★</view>
+</view>

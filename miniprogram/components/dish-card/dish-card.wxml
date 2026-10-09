@@ -1,0 +1,30 @@
+<view class="dish-card card" hover-class="tap-feedback" hover-stay-time="120" bindtap="onDetail">
+  <view class="dish-image">
+    <image wx:if="{{dish.imageUrl}}" class="dish-photo" src="{{dish.imageUrl}}" mode="aspectFill"></image>
+    <text wx:else>{{dish.emoji || '🍽️'}}</text>
+  </view>
+  <view class="dish-main">
+    <view class="dish-title-row">
+      <view class="dish-name">{{dish.name}}</view>
+      <view class="tag">{{dish.categoryName || dish.categoryLabel || '菜品'}}</view>
+    </view>
+    <view class="dish-desc">{{dish.description}}</view>
+    <view class="price">¥ {{dish.price}}</view>
+    <view wx:if="{{dish.status}}" class="status {{dish.status === 'online' ? 'online' : 'offline'}}">
+      {{dish.status === 'online' ? '已上架' : '已下架'}}
+    </view>
+  </view>
+  <view wx:if="{{!manage}}" class="dish-action">
+    <button wx:if="{{quantity === 0}}" class="add-button" hover-class="tap-feedback" hover-stay-time="120" catchtap="onAdd">加入</button>
+    <view wx:else class="stepper">
+      <button class="stepper-button" hover-class="tap-feedback" hover-stay-time="120" catchtap="onDecrease">-</button>
+      <text class="stepper-count">{{quantity}}</text>
+      <button class="stepper-button" hover-class="tap-feedback" hover-stay-time="120" catchtap="onAdd">+</button>
+    </view>
+  </view>
+  <view wx:else class="manage-actions">
+    <button class="manage-button edit" hover-class="tap-feedback" hover-stay-time="120" catchtap="onEdit">编辑</button>
+    <button class="manage-button black" hover-class="tap-feedback" hover-stay-time="120" catchtap="onToggle">{{dish.status === 'online' ? '下架' : '上架'}}</button>
+    <button class="manage-button delete" hover-class="tap-feedback" hover-stay-time="120" catchtap="onDelete">删除</button>
+  </view>
+</view>

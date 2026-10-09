@@ -1,0 +1,138 @@
+const fs = require('node:fs/promises');
+const os = require('node:os');
+const path = require('node:path');
+const { execFileSync } = require('node:child_process');
+const { parseHowToCookMarkdown } = require('./lib/howtocook-parser');
+
+const OWNER = 'Anduin2017';
+const REPO = 'HowToCook';
+const BRANCH = 'master';
+const ARCHIVE_URL = `https://codeload.github.com/${OWNER}/${REPO}/tar.gz/refs/heads/${BRANCH}`;
+const TREE_URL = `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`;
+const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/`;
+const WEB_BASE = `https://github.com/${OWNER}/${REPO}/blob/${BRANCH}/`;
+const OUTPUT_FILE = path.join(__dirname, '../miniprogram/data/howtocook-recipes.js');
+const LOCAL_SOURCE_DIR = process.env.HOWTOCOOK_DIR || '';
+
+async function fetchJson(url) {
+  const response = await fetch(url, { headers: { 'User-Agent': 'lover-ordering-dishes-sync' }, signal: AbortSignal.timeout(15000) });
+  if (!response.ok) throw new Error(`Request failed ${response.status}: ${url}`);
+  return response.json();
+}
+
+async function fetchText(url) {
+  const response = await fetch(url, { headers: { 'User-Agent': 'lover-ordering-dishes-sync' }, signal: AbortSignal.timeout(15000) });
+  if (!response.ok) throw new Error(`Request failed ${response.status}: ${url}`);
+  return response.text();
+}
+
+async function fetchBuffer(url) {
+  const response = await fetch(url, { headers: { 'User-Agent': 'lover-ordering-dishes-sync' }, signal: AbortSignal.timeout(120000) });
+  if (!response.ok) throw new Error(`Request failed ${response.status}: ${url}`);
+  return Buffer.from(await response.arrayBuffer());
+}
+
+function isRecipeMarkdown(entry) {
+  return entry.type === 'blob'
+    && entry.path.startsWith('dishes/')
+    && entry.path.endsWith('.md')
+    && !entry.path.includes('/template/')
+    && !entry.path.includes('README');
+}
+
+async function mapWithConcurrency(items, limit, mapper) {
+  const results = [];
+  let cursor = 0;
+  async function worker() {
+    while (cursor < items.length) {
+      const index = cursor;
+      cursor += 1;
+      results[index] = await mapper(items[index], index);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
+async function walkMarkdownFiles(rootDir, dir = 'dishes', files = []) {
+  const fullDir = path.join(rootDir, dir);
+  let entries = [];
+  try {
+    entries = await fs.readdir(fullDir, { withFileTypes: true });
+  } catch (error) {
+    if (error.code === 'ENOENT') return files;
+    throw error;
+  }
+  for (const entry of entries) {
+    const relativePath = path.join(dir, entry.name).replaceAll(path.sep, '/');
+    if (entry.isDirectory()) {
+      if (relativePath !== 'dishes/template') await walkMarkdownFiles(rootDir, relativePath, files);
+    } else if (relativePath.endsWith('.md') && isRecipeMarkdown({ type: 'blob', path: relativePath })) {
+      files.push({ type: 'blob', path: relativePath, localPath: path.join(rootDir, relativePath) });
+    }
+  }
+  return files;
+}
+
+async function loadRecipesFromLocalDirectory(rootDir) {
+  const files = await walkMarkdownFiles(rootDir);
+  return Promise.all(files.map(async (file) => {
+    const markdown = await fs.readFile(file.localPath, 'utf8');
+    return parseHowToCookMarkdown(markdown, {
+      path: file.path,
+      htmlUrl: `${WEB_BASE}${encodeURI(file.path).replace(/%2F/g, '/')}`
+    });
+  }));
+}
+
+async function loadRecipesFromGitHub() {
+  const tree = await fetchJson(TREE_URL);
+  const files = (tree.tree || []).filter(isRecipeMarkdown);
+  if (!files.length) throw new Error('No HowToCook recipe markdown files found');
+
+  return mapWithConcurrency(files, 6, async (file) => {
+    const downloadUrl = `${RAW_BASE}${encodeURI(file.path).replace(/%2F/g, '/')}`;
+    const markdown = await fetchText(downloadUrl);
+    return parseHowToCookMarkdown(markdown, {
+      path: file.path,
+      downloadUrl,
+      htmlUrl: `${WEB_BASE}${encodeURI(file.path).replace(/%2F/g, '/')}`
+    });
+  });
+}
+
+async function loadRecipesFromGitHubArchive() {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'howtocook-'));
+  try {
+    const archivePath = path.join(tempDir, 'howtocook.tgz');
+    await fs.writeFile(archivePath, await fetchBuffer(ARCHIVE_URL));
+    execFileSync('tar', ['-xzf', archivePath, '-C', tempDir]);
+    const recipes = await loadRecipesFromLocalDirectory(path.join(tempDir, `${REPO}-${BRANCH}`));
+    return recipes;
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+}
+
+async function main() {
+  const recipes = LOCAL_SOURCE_DIR
+    ? await loadRecipesFromLocalDirectory(LOCAL_SOURCE_DIR)
+    : await loadRecipesFromGitHubArchive();
+  const usableRecipes = recipes
+    .filter((recipe) => recipe.ingredients.length && recipe.steps.length > 1)
+    .sort((a, b) => a.category.localeCompare(b.category, 'zh-Hans-CN') || a.name.localeCompare(b.name, 'zh-Hans-CN'));
+
+  const source = `// Generated by scripts/sync-howtocook-recipes.js. Do not edit manually.\nconst HOWTOCOOK_RECIPES = ${JSON.stringify(usableRecipes, null, 2)};\n\nmodule.exports = { HOWTOCOOK_RECIPES };\n`;
+  await fs.mkdir(path.dirname(OUTPUT_FILE), { recursive: true });
+  await fs.writeFile(OUTPUT_FILE, source);
+  console.log(`Generated ${usableRecipes.length} recipes at ${OUTPUT_FILE}`);
+}
+
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}
+
+module.exports = { isRecipeMarkdown, loadRecipesFromGitHub, loadRecipesFromLocalDirectory };

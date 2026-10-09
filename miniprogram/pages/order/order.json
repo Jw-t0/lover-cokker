@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "客人点菜",
+  "usingComponents": {
+    "dish-card": "/components/dish-card/dish-card",
+    "cart-sheet": "/components/cart-sheet/cart-sheet",
+    "empty-state": "/components/empty-state/empty-state",
+    "role-tab-bar": "/components/role-tab-bar/role-tab-bar"
+  }
+}

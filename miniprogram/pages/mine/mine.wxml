@@ -1,0 +1,49 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="card mine-loading">正在打开你的饭堂</view>
+  <view wx:elif="{{error}}" class="card mine-error">
+    <view class="section-title">个人空间暂时打不开</view>
+    <view class="muted">{{error}}</view>
+    <button class="soft-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="retry">重新加载</button>
+  </view>
+  <block wx:else>
+  <view class="profile card" hover-class="tap-feedback" hover-stay-time="120" bindtap="goProfile">
+    <view class="avatar">
+      <image wx:if="{{user.avatarUrl}}" class="avatar-image" src="{{user.avatarUrl}}" mode="aspectFill"></image>
+      <text wx:else>♡</text>
+    </view>
+    <view class="profile-main">
+      <view class="name">{{user.nickname || '还没有昵称'}}</view>
+      <view class="tag">{{relationState === 'active' ? '已绑定' : (relationState === 'solo' ? '单人体验' : (relationState === 'pending_delete' ? '待恢复' : (relationState === 'unknown' ? '状态待确认' : '未绑定')))}}</view>
+      <view class="uid">UID：{{user.uid || '暂未生成'}}</view>
+      <view class="hint">点击头像或资料卡编辑个人信息</view>
+    </view>
+    <view class="arrow">›</view>
+  </view>
+
+  <view class="couple-card">
+    <view class="heart-icon">♡</view>
+    <view>
+    <view class="couple-title">{{relationState === 'active' ? '情侣空间已开启' : (relationState === 'solo' ? '单人饭桌已开启' : (relationState === 'pending_delete' ? '关系已解除' : '还没有情侣空间'))}}</view>
+      <view class="couple-desc">{{relationState === 'active' ? '共享菜单、订单和点菜记录' : (relationState === 'solo' ? '先自己点菜，也可以邀请另一半加入' : (relationState === 'pending_delete' ? '订单记录仍会保留，邀请 TA 可以恢复关系' : '邀请另一半加入情侣小饭桌'))}}</view>
+    </view>
+    <button class="couple-button" hover-class="tap-feedback" hover-stay-time="120" bindtap="createInvite">{{relationState === 'active' ? '再次邀请' : (relationState === 'pending_delete' ? '恢复关系' : (relationState === 'solo' ? '邀请TA' : '去邀请'))}}</button>
+  </view>
+
+  <view class="feature card">
+    <view class="section-title">功能分区</view>
+    <view class="grid">
+      <view wx:for="{{features}}" wx:key="text" data-url="{{item.url}}" hover-class="tap-feedback" hover-stay-time="120" bindtap="goFeature" class="grid-item">
+        <view class="grid-icon">{{item.icon}}</view>
+        <text>{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+  <profile-choice-sheet
+    visible="{{profileChoiceVisible}}"
+    bind:complete="chooseProfileForInvite"
+    bind:direct="sendInviteDirectly"
+    bind:close="closeProfileChoice"
+  />
+  </block>
+  <role-tab-bar current="/pages/mine/mine" />
+</view>

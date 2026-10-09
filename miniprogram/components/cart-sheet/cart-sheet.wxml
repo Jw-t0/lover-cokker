@@ -1,0 +1,29 @@
+<view wx:if="{{visible}}" class="sheet-wrap">
+  <view class="mask" bindtap="close"></view>
+  <view class="sheet">
+    <view class="between header">
+      <view>购物车</view>
+      <view class="clear-action" hover-class="tap-feedback" hover-stay-time="120" bindtap="clear">清空</view>
+    </view>
+    <view wx:if="{{cart.length === 0}}" class="empty-cart">还没有选菜，去挑一道喜欢的吧</view>
+    <view wx:for="{{cart}}" wx:key="cartKey" class="cart-row">
+      <view class="cart-info">
+        <view class="name">{{item.name}}</view>
+        <view wx:if="{{item.tasteText}}" class="taste-text">{{item.tasteText}}</view>
+        <view class="price">¥ {{item.price}}</view>
+      </view>
+      <view class="stepper">
+        <button class="stepper-button" hover-class="tap-feedback" hover-stay-time="120" data-id="{{item.cartKey || item.dishId}}" bindtap="decrease">-</button>
+        <text>{{item.quantity}}</text>
+        <button class="stepper-button" hover-class="tap-feedback" hover-stay-time="120" data-id="{{item.cartKey || item.dishId}}" bindtap="increase">+</button>
+      </view>
+    </view>
+    <view class="between footer">
+      <view>共 {{summary.count}} 份，<text class="footer-price">¥ {{summary.totalPrice}}</text></view>
+      <button class="footer-button checkout-button {{summary.count > 0 ? 'primary-button' : 'disabled-button'}}" hover-class="tap-feedback" hover-stay-time="120" disabled="{{summary.count === 0}}" bindtap="submit">
+        <text>确认订单</text>
+        <text class="footer-arrow">›</text>
+      </button>
+    </view>
+  </view>
+</view>
